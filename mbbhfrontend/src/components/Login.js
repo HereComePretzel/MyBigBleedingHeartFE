@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { loginSuccess } from '../actions/auth'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 class Login extends React.Component {
   state = {
       username: '',
@@ -45,16 +46,25 @@ class Login extends React.Component {
 
 render() {
   return (
-    <div className='logincontainer'>
-        <h3 className='signintext'>My Big Bleeding Heart</h3>
-        {this.state.error && <h4 style={{color:'red'}}>{this.state.error}</h4>}
-        <form onSubmit={this.handleSubmit}>
-          <input className='loginbox' name={'username'} onChange={this.handleInputChange} value={this.state.username}/><br></br>
-          <input className='loginbox' name={'password'} onChange={this.handleInputChange} value={this.state.password}/>
-          <input className='loginbutton' type='submit' value='login' />
-        </form>
-        <Button variant='primary'>Buttstrap</Button>
-      </div>
+      
+<Form onSubmit={this.handleSubmit}>
+{this.state.error && <h4 style={{color:'orange'}}>{this.state.error}</h4>}
+  <Form.Group controlId="formBasicEmail">
+    <Form.Label>Username</Form.Label>
+    <Form.Control name={'username'} value={this.state.username} onChange={this.handleInputChange}style={{width: 300}}type="username" placeholder="Enter username" />
+    <Form.Text className="text-muted">
+      We'll never share your email with anyone else.
+    </Form.Text>
+  </Form.Group>
+
+  <Form.Group controlId="formBasicPassword">
+    <Form.Label>Password</Form.Label>
+    <Form.Control name={'password'} value={this.state.password} onChange={this.handleInputChange} style={{width: 300}} type="password" placeholder="Password" />
+  </Form.Group>
+  <Button variant="primary" type="submit">
+    Submit
+  </Button>
+</Form>
     )
   }
 

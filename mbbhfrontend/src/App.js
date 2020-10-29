@@ -7,6 +7,7 @@ import NoMatch from './components/NoMatch'
 import NewPost from './components/NewPost'
 import Navbar from './components/Navbar'
 import EmailForm from './components/EmailForm'
+import Edit from './components/EditPost'
 import {Switch, Route} from 'react-router-dom'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Navbar />
       <Switch>
         <Route path='/login' component={Login} />
+        <Route path='/edit/:id' component={Edit} />
         <Route path='/dashboard' component={Dashboard} />
         <Route path='/signup' component={Signup} />
         <Route path='/new' component={NewPost} />

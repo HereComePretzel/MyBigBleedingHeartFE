@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Navbar from './Navbar'
 import {currentUser} from '../actions/auth'
+import { fetchPostsSuccess } from '../actions/posts'
+import PostCard from './PostCard'
 
 class Dashboard extends React.Component{
 
@@ -28,13 +30,24 @@ class Dashboard extends React.Component{
             })
         }
 
-
+        fetch(`http://localhost:3000/posts`)
+        .then(resp => resp.json())
+        .then(posts => {
+            this.props.fetchPostsSuccess(posts)
+        })
     }
+
+    renderPosts = () => {
+        return this.props.posts.map(postObj => {
+            return <PostCard postObj={postObj} key={postObj.id}/>
+        })
+    }
+
 
     render(){
         return (
             <div>
-                Dashboard Page
+                {this.renderPosts()}
             </div>
         )
     }
@@ -42,12 +55,14 @@ class Dashboard extends React.Component{
 
 const mapStateToProps = (state) => {
     return {
+        posts: state.posts,
         auth: state.auth
     }
 }
 
 const mapDispatchToProps = {
-    currentUser
+    currentUser,
+    fetchPostsSuccess
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

@@ -1,52 +1,66 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { editPost } from '../actions/posts'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { connect } from 'react-redux'
-import { newPost } from '../actions/posts'
-import Navbar from './Navbar'
 
 
-class NewPost extends Component {
+class EditPost extends React.Component{
     state = {
-    number: '',
-    meds_taken: false,
-    suicidal_thoughts: false,
-    good_thoughts: '',
-    bad_thoughts: '',
-    goals: '',
-    notes: '',
-    happy_memory: ''
+        number: '',
+        meds_taken: false,
+        suicidal_thoughts: false,
+        good_thoughts: '',
+        bad_thoughts: '',
+        goals: '',
+        notes: '',
+        happy_memory: ''
     }
 
-
-    addPost = (e) => {
-    e.preventDefault()
-
-    const reqObj = {
-    method: 'POST',
-    headers: {
-        'Content-Type' : 'application/json'
-    },
-      body: JSON.stringify(this.state)
-    }
-    fetch('http://localhost:3000/posts', reqObj)
-    .then(resp => resp.json())
-    .then(post => {
-      this.props.history.push('/dashboard')
-      this.props.newPost(post)
-      
-    })
-    }
-  
-
-  handleChange = (e) => {
-    this.setState({ 
-      [e.target.name]: e.target.value
-    })
-  }
-  render() {
-    return (
-        <Form onSubmit={this.addPost}>
+    editNote = (e) => {
+        e.preventDefault()
+    
+        const reqObj = {
+          method: 'PATCH',
+          headers: {
+            'Content-Type' : 'application/json'
+          },
+          body: JSON.stringify(this.state)
+        }
+          fetch(`http://localhost:3000/posts/${this.props.notes[0].id}`, reqObj)
+          .then(resp => resp.json())
+          .then(post => {
+            this.props.editPost(post)
+            this.props.history.push('/')
+          })
+        }
+    
+        componentDidMount(){
+          const { number, meds_taken, suicidal_thoughts, good_thoughts, bad_thoughts, goals, notes, happy_memory } = this.props.posts[0]
+          this.setState({
+            number,
+            meds_taken,
+            suicidal_thoughts,
+            good_thoughts,
+            bad_thoughts,
+            goals,
+            notes,
+            happy_memory
+        })
+      }
+    
+      handleChange = (e) => {
+        this.setState({ 
+          [e.target.name]: e.target.value
+        })
+      }
+    
+    
+      render(){
+        return (
+            <div>
+                <Form onSubmit={this.editNote}>
   <Form.Group controlId="exampleForm.ControlSelect1">
     <Form.Label>How Was Your Day?</Form.Label>
     <Form.Control onChange={this.handleChange} name='number' value={this.state.number} as="select">
@@ -95,19 +109,20 @@ class NewPost extends Component {
   <Button variant="primary">Submit</Button>{' '}
   <Button variant="primary">Exit</Button>
 </Form>
-    )
-  }
+            </div>
+        )
+    }
 }
+
 const mapStateToProps = (state) => {
-  return {
-  posts: state.posts
+    return {
+    notes: state.posts
+    }
   }
-}
-
-
-const mapDispatchToProps = {
-  newPost
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewPost)
+  
+  
+  const mapDispatchToProps = {
+    editPost
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(EditPost)
