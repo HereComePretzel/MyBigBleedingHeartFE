@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from './Navbar'
+// import NavHeader from './NavHeader'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
@@ -8,11 +8,12 @@ class Profile extends React.Component{
     render(){
         return (
             <div>
-                <Navbar />
+                {/* <NavHeader /> */}
                 Profile Page
             </div>
         )
     }
 }
 
-export default Profile
+
+export default connect(null, null)(Profile)

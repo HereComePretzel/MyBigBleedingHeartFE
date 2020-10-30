@@ -5,7 +5,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import NoMatch from './components/NoMatch'
 import NewPost from './components/NewPost'
-import Navbar from './components/Navbar'
+import NavHeader from './components/NavHeader'
 import EmailForm from './components/EmailForm'
 import Edit from './components/EditPost'
 import {Switch, Route} from 'react-router-dom'
@@ -13,7 +13,7 @@ import {Switch, Route} from 'react-router-dom'
 function App() {
   return (
     <div className="App">
-      <Navbar />
+      <NavHeader />
       <Switch>
         <Route path='/login' component={Login} />
         <Route path='/edit/:id' component={Edit} />

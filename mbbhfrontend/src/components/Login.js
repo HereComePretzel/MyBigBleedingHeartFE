@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import { loginSuccess } from '../actions/auth'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import { Link } from 'react-router-dom'
+
+
 class Login extends React.Component {
   state = {
       username: '',
@@ -64,6 +67,9 @@ render() {
   <Button variant="primary" type="submit">
     Submit
   </Button>
+  <Link to='/signup'><Button variant="primary" type="submit">
+    Sign Up
+  </Button></Link>
 </Form>
     )
   }

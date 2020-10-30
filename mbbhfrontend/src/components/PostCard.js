@@ -8,22 +8,6 @@ const HomeCard = props => {
   const showLink = `/show/${props.postObj.id}`
   
     return(
-//   <Item.Group className='center'>
-//     <Item>
-//       <Icon name='thumbtack' size='large' corner='bottom right' color='brown'/>
-
-//       <Item.Content >
-//         <Item.Header style={{color: '#FFA500'}} as='a'>{props.noteObj.title}</Item.Header>
-//         <Item.Description style={{color: '#FFA500'}}>{props.noteObj.body}</Item.Description>
-//         <Item.Extra>
-//         <Link to={showLink}><Button>
-//             View
-//             <Icon name='right chevron' />
-//           </Button></Link>
-//         </Item.Extra>
-//       </Item.Content>
-//     </Item>
-//   </Item.Group>
     <Card style={{ width: '18rem' }}>
     <Card.Img variant="top" src="holder.js/100px180" />
     <Card.Body>
@@ -39,7 +23,7 @@ const HomeCard = props => {
         notes = {props.postObj.notes}<br></br>
         happy memory = {props.postObj.happy_memory}<br></br>
     </Card.Text>
-    <Link to={showLink}><Button variant="primary">Go somewhere</Button></Link>
+    <Link to={showLink}><Button variant="primary">Edit</Button></Link>
     </Card.Body>
 </Card>
 

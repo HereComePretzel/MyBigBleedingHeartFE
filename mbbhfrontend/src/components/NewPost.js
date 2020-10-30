@@ -3,25 +3,57 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import { newPost } from '../actions/posts'
-import Navbar from './Navbar'
+import { currentUser } from '../actions/auth'
+import NavHeader from './NavHeader'
+
 
 
 class NewPost extends Component {
     state = {
     number: '',
-    meds_taken: false,
+    meds_taken: true,
     suicidal_thoughts: false,
     good_thoughts: '',
     bad_thoughts: '',
     goals: '',
     notes: '',
-    happy_memory: ''
+    happy_memory: '',
+    user_id: ''
     }
 
 
+
+   componentDidMount(){
+      const token = localStorage.getItem('myAppToken')
+      if(!token) {
+          this.props.history.push('/login')
+      } else {
+          const reqObj = {
+              method: 'GET',
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+          }
+          fetch('http://localhost:3000/api/v1/current_user', reqObj)
+          .then(resp => resp.json())
+          .then(data => { 
+              if (data.error){
+                  this.props.history.push('/login')
+              } else {
+                  this.props.currentUser(data)
+                  this.setState({
+                    user_id: data.id
+                  })
+                
+
+              }
+          })
+      }}
+    
+    
     addPost = (e) => {
     e.preventDefault()
-
+      console.log(this.state)
     const reqObj = {
     method: 'POST',
     headers: {
@@ -34,6 +66,7 @@ class NewPost extends Component {
     .then(post => {
       this.props.history.push('/dashboard')
       this.props.newPost(post)
+      console.log(reqObj)
       
     })
     }
@@ -46,8 +79,8 @@ class NewPost extends Component {
   }
   render() {
     return (
-        <Form onSubmit={this.addPost}>
-  <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form onSubmit={this.addPost} >
+      <Form.Group controlId="exampleForm.ControlSelect1">
     <Form.Label>How Was Your Day?</Form.Label>
     <Form.Control onChange={this.handleChange} name='number' value={this.state.number} as="select">
       <option>1</option>
@@ -68,8 +101,8 @@ class NewPost extends Component {
     </Form.Control>
     <Form.Label>Did You Have Thoughts of Suicide?</Form.Label>
     <Form.Control onChange={this.handleChange} name='suicidal_thoughts' value={this.state.suicidal_thoughts} as="select">
-      <option>True</option>
       <option>False</option>
+      <option>True</option>
     </Form.Control>
   </Form.Group>
   <Form.Group controlId="exampleForm.ControlTextarea1">
@@ -92,7 +125,7 @@ class NewPost extends Component {
     <Form.Label>Happy Memory</Form.Label>
     <Form.Control onChange={this.handleChange} name='happy_memory' value={this.state.happy_memory} as="textarea" rows={3}/>
   </Form.Group>
-  <Button variant="primary">Submit</Button>{' '}
+  <Button type='submit' variant="primary">Submit</Button>{' '}
   <Button variant="primary">Exit</Button>
 </Form>
     )
@@ -100,13 +133,15 @@ class NewPost extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-  posts: state.posts
+  posts: state.posts,
+  auth: state.auth
   }
 }
 
 
 const mapDispatchToProps = {
-  newPost
+  newPost,
+  currentUser
 }
 
 

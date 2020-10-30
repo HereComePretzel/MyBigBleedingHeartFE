@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Navbar from './Navbar'
+import Navbar from './NavHeader'
 import {currentUser} from '../actions/auth'
 import { fetchPostsSuccess } from '../actions/posts'
 import PostCard from './PostCard'
@@ -33,7 +33,9 @@ class Dashboard extends React.Component{
         fetch(`http://localhost:3000/posts`)
         .then(resp => resp.json())
         .then(posts => {
-            this.props.fetchPostsSuccess(posts)
+            console.log(posts)
+            const userPosts = posts.filter(post => post.user.id === this.props.auth.id)
+            this.props.fetchPostsSuccess(userPosts)
         })
     }
 

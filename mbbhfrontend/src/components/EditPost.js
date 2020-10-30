@@ -17,6 +17,32 @@ class EditPost extends React.Component{
         notes: '',
         happy_memory: ''
     }
+    componentDidMount(){
+      const token = localStorage.getItem('myAppToken')
+      if(!token) {
+          this.props.history.push('/login')
+      } else {
+          const reqObj = {
+              method: 'GET',
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+          }
+          fetch('http://localhost:3000/api/v1/current_user', reqObj)
+          .then(resp => resp.json())
+          .then(data => { 
+              if (data.error){
+                  this.props.history.push('/login')
+              } else {
+                  this.props.currentUser(data)
+                  this.setState({
+                    user_id: data.id
+                  })
+                
+
+              }
+          })
+      }}
 
     editNote = (e) => {
         e.preventDefault()
@@ -34,9 +60,6 @@ class EditPost extends React.Component{
             this.props.editPost(post)
             this.props.history.push('/')
           })
-        }
-    
-        componentDidMount(){
           const { number, meds_taken, suicidal_thoughts, good_thoughts, bad_thoughts, goals, notes, happy_memory } = this.props.posts[0]
           this.setState({
             number,
@@ -47,8 +70,11 @@ class EditPost extends React.Component{
             goals,
             notes,
             happy_memory
-        })
-      }
+          })
+        }
+    
+        componentDidMount(){
+        }
     
       handleChange = (e) => {
         this.setState({ 
