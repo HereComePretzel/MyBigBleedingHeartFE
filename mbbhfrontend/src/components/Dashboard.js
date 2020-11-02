@@ -1,70 +1,64 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import '../App.css';
+import React from 'react';
+import NavHeader from './NavHeader'
+import App from '../App.js'
+import NewPost from './NewPost'
+import EmailForm from './EmailForm'
+import EditPost from './EditPost'
+import ShowPost from './ShowPost'
+import {Switch, Route} from 'react-router-dom'
+import NoMatch from './NoMatch'
+import { currentUser } from '../actions/auth'
 import { connect } from 'react-redux'
-import Navbar from './NavHeader'
-import {currentUser} from '../actions/auth'
-import { fetchPostsSuccess } from '../actions/posts'
-import PostCard from './PostCard'
+import Profile from './Profile'
+import DashboardContainer from './DashboardContainer'
 
-class Dashboard extends React.Component{
 
-    componentDidMount(){
-        const token = localStorage.getItem('myAppToken')
-        if(!token) {
-            this.props.history.push('/login')
-        } else {
-            const reqObj = {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+class Dashboard extends React.Component {
+
+componentDidMount(){
+    const token = localStorage.getItem('myAppToken')
+    if(!token) {
+        this.props.history.push('/login')
+    } else {
+        const reqObj = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
-            fetch('http://localhost:3000/api/v1/current_user', reqObj)
-            .then(resp => resp.json())
-            .then(data => {
-                if (data.error){
-                    this.props.history.push('/login')
-                } else {
-                    this.props.currentUser(data)
-                }
-            })
         }
-
-        fetch(`http://localhost:3000/posts`)
+        fetch('http://localhost:3000/api/v1/current_user', reqObj)
         .then(resp => resp.json())
-        .then(posts => {
-            console.log(posts)
-            const userPosts = posts.filter(post => post.user.id === this.props.auth.id)
-            this.props.fetchPostsSuccess(userPosts)
+        .then(data => {
+            if (data.error){
+                this.props.history.push('/login')
+            } else {
+                this.props.currentUser(data)
+            }
         })
-    }
-
-    renderPosts = () => {
-        return this.props.posts.map(postObj => {
-            return <PostCard postObj={postObj} key={postObj.id}/>
-        })
-    }
-
-
-    render(){
-        return (
-            <div>
-                {this.renderPosts()}
-            </div>
-        )
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        posts: state.posts,
-        auth: state.auth
-    }
+render() {
+  return (
+    <div>
+      <Switch>
+        <Route exact path='/dashboard' component={DashboardContainer}/>
+        <Route path='/dashboard/edit/:id' component={EditPost} />
+        <Route path='/dashboard/new' component={NewPost} />
+        <Route path='/dashboard/email' component={EmailForm} />
+        <Route path='/dashboard/show/:id' component={ShowPost}/>
+        <Route path='/dashboard/profile' component={Profile}/>
+        <Route path='*' component={NoMatch} />
+      </Switch>
+    </div>
+  );
+}
 }
 
 const mapDispatchToProps = {
-    currentUser,
-    fetchPostsSuccess
+    currentUser
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
+
+export default connect(null, mapDispatchToProps)(Dashboard)

@@ -1,13 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { editPost } from '../actions/posts'
+import { editPostItem } from '../actions/posts'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import { currentUser } from '../actions/auth'
 
 
 class EditPost extends React.Component{
     state = {
+        date: '',
         number: '',
         meds_taken: false,
         suicidal_thoughts: false,
@@ -17,34 +18,9 @@ class EditPost extends React.Component{
         notes: '',
         happy_memory: ''
     }
-    componentDidMount(){
-      const token = localStorage.getItem('myAppToken')
-      if(!token) {
-          this.props.history.push('/login')
-      } else {
-          const reqObj = {
-              method: 'GET',
-              headers: {
-                  'Authorization': `Bearer ${token}`
-              }
-          }
-          fetch('http://localhost:3000/api/v1/current_user', reqObj)
-          .then(resp => resp.json())
-          .then(data => { 
-              if (data.error){
-                  this.props.history.push('/login')
-              } else {
-                  this.props.currentUser(data)
-                  this.setState({
-                    user_id: data.id
-                  })
-                
 
-              }
-          })
-      }}
 
-    editNote = (e) => {
+    editPost = (e) => {
         e.preventDefault()
     
         const reqObj = {
@@ -54,26 +30,28 @@ class EditPost extends React.Component{
           },
           body: JSON.stringify(this.state)
         }
-          fetch(`http://localhost:3000/posts/${this.props.notes[0].id}`, reqObj)
+        
+          fetch(`http://localhost:3000/posts/${this.props.posts[0].id}`, reqObj)
           .then(resp => resp.json())
           .then(post => {
-            this.props.editPost(post)
-            this.props.history.push('/')
-          })
-          const { number, meds_taken, suicidal_thoughts, good_thoughts, bad_thoughts, goals, notes, happy_memory } = this.props.posts[0]
-          this.setState({
-            number,
-            meds_taken,
-            suicidal_thoughts,
-            good_thoughts,
-            bad_thoughts,
-            goals,
-            notes,
-            happy_memory
+            this.props.editPostItem(post)
+            this.props.history.push('/dashboard')
           })
         }
     
         componentDidMount(){
+          // const { number, meds_taken, suicidal_thoughts, good_thoughts, bad_thoughts, goals, notes, happy_memory } = this.props.posts[0]
+          this.setState({
+            date: this.props.posts.date,
+            number: this.props.posts.number,
+            meds_taken: this.props.posts.meds_taken,
+            suicidal_thoughts: this.props.posts.suicidal_thoughts,
+            good_thoughts: this.props.posts.good_thoughts,
+            bad_thoughts: this.props.posts.bad_thoughts,
+            goals: this.props.posts.goals,
+            notes: this.props.posts.notes,
+            happy_memory: this.props.posts.happy_memory
+          })
         }
     
       handleChange = (e) => {
@@ -86,7 +64,11 @@ class EditPost extends React.Component{
       render(){
         return (
             <div>
-                <Form onSubmit={this.editNote}>
+              <Form onSubmit={this.editPost}>
+              <Form.Group controlId="exampleForm.ControlTextarea7">
+            <Form.Label>Date</Form.Label>
+            <Form.Control onChange={this.handleChange} placeholder='DD/MM/YYYY' name='date' value={this.state.date} as="textarea" rows={1} />
+          </Form.Group>
   <Form.Group controlId="exampleForm.ControlSelect1">
     <Form.Label>How Was Your Day?</Form.Label>
     <Form.Control onChange={this.handleChange} name='number' value={this.state.number} as="select">
@@ -132,7 +114,7 @@ class EditPost extends React.Component{
     <Form.Label>Happy Memory</Form.Label>
     <Form.Control onChange={this.handleChange} name='happy_memory' value={this.state.happy_memory} as="textarea" rows={3}/>
   </Form.Group>
-  <Button variant="primary">Submit</Button>{' '}
+  <Button variant="primary" type='submit'>Submit</Button>{' '}
   <Button variant="primary">Exit</Button>
 </Form>
             </div>
@@ -142,13 +124,14 @@ class EditPost extends React.Component{
 
 const mapStateToProps = (state) => {
     return {
-    notes: state.posts
+    posts: state.posts
     }
   }
   
   
   const mapDispatchToProps = {
-    editPost
+    editPostItem,
+    currentUser
   }
   
   export default connect(mapStateToProps, mapDispatchToProps)(EditPost)

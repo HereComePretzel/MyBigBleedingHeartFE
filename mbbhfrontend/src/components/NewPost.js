@@ -5,11 +5,14 @@ import { connect } from 'react-redux'
 import { newPost } from '../actions/posts'
 import { currentUser } from '../actions/auth'
 import NavHeader from './NavHeader'
+import { Link } from 'react-router-dom'
+
 
 
 
 class NewPost extends Component {
     state = {
+    date: '',
     number: '',
     meds_taken: true,
     suicidal_thoughts: false,
@@ -66,7 +69,6 @@ class NewPost extends Component {
     .then(post => {
       this.props.history.push('/dashboard')
       this.props.newPost(post)
-      console.log(reqObj)
       
     })
     }
@@ -79,7 +81,11 @@ class NewPost extends Component {
   }
   render() {
     return (
-          <Form onSubmit={this.addPost} >
+      <Form onSubmit={this.addPost}  style={{width:'50%'}} className="mx-auto">
+        <Form.Group controlId="exampleForm.ControlTextarea7">
+            <Form.Label>Date</Form.Label>
+            <Form.Control onChange={this.handleChange} placeholder='DD/MM/YYYY' name='date' value={this.state.date} as="textarea" rows={1} />
+          </Form.Group>
       <Form.Group controlId="exampleForm.ControlSelect1">
     <Form.Label>How Was Your Day?</Form.Label>
     <Form.Control onChange={this.handleChange} name='number' value={this.state.number} as="select">
@@ -126,7 +132,7 @@ class NewPost extends Component {
     <Form.Control onChange={this.handleChange} name='happy_memory' value={this.state.happy_memory} as="textarea" rows={3}/>
   </Form.Group>
   <Button type='submit' variant="primary">Submit</Button>{' '}
-  <Button variant="primary">Exit</Button>
+  <Link to='/dashboard'><Button variant="primary">Exit</Button></Link>
 </Form>
     )
   }

@@ -2,67 +2,84 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import { newUser } from '../actions/users'
 
 class Signup extends React.Component{
+  state = {
+    username: '',
+    password: '',
+    email: ''
+  }
+
+  
+
+  addUser = (e) => {
+    e.preventDefault()
+
+    const reqObj = {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify(this.state)
+    }
+    fetch('http://localhost:3000/users', reqObj)
+    .then(resp => resp.json())
+    .then(user => {
+      this.props.history.push('/dashboard')
+      this.props.newUser(user)
+    })
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
 
     render(){
         return (
             <div>
-                <Form>
+                      <form className='newcontainer' onSubmit={this.addUser}>
+        <h1 className='titletext'>Username</h1>
+          <input name='username' className='titlebox' onChange={this.handleChange} value={this.state.username}/>
+          <h2 className='titletext'>Password</h2>
+          <textarea name='password' className='titlebox' onChange={this.handleChange} value={this.state.password}/>
+          <h2 className='titletext'>Email</h2>
+          <textarea name='email' className='titlebox' onChange={this.handleChange} value={this.state.email}/>
+          <br></br>
+          <input className='addbutton' type='submit' value='Sign Up' />
+        </form>
+                {/* <Form onSubmit={this.addUser} style={{width:'50%'}} className="mx-auto">
   <Form.Group controlId="username">
     <Form.Label>Username</Form.Label>
-    <Form.Control type="username"/>
+    <Form.Control type="input" name='username' onChange={this.handleChange} value={this.state.username}/>
   </Form.Group>
   <Form.Group controlId="password">
     <Form.Label>Password</Form.Label>
-    <Form.Control type="password"/>
-  </Form.Group>
-  <Form.Group controlId="confirmpassword">
-    <Form.Label>Confirm Password</Form.Label>
-    <Form.Control type="email"/>
+    <Form.Control type="password" name='password' onChange={this.handleChange} value={this.state.password}/>
   </Form.Group>
   <Form.Group controlId="email">
     <Form.Label>Email</Form.Label>
-    <Form.Control type="password"/>
+    <Form.Control type="email" name='email' onChange={this.handleChange} value={this.state.email}/>
   </Form.Group>
-  <Form.Group controlId="name">
-    <Form.Label>Name</Form.Label>
-    <Form.Control type="email"/>
-  </Form.Group>
-  <Form.Group controlId="Birthday">
-    <Form.Label>Birthday</Form.Label>
-    <Form.Control type="password"/>
-  </Form.Group>
-  <Form.Group controlId="Age">
-    <Form.Label>Age</Form.Label>
-    <Form.Control type="email"/>
-  </Form.Group>
-  <Form.Group controlId="Gender ID">
-    <Form.Label>Gender ID</Form.Label>
-    <Form.Control type="password" placeholder="M/F/Non-binary" />
-  </Form.Group>
-  <Form.Group controlId="Sexual Orientation">
-    <Form.Label>Sexual Orientation</Form.Label>
-    <Form.Control type="password" placeholder="gay, straight, pan..." />
-  </Form.Group>
-  <Form.Group controlId="Zipcode">
-    <Form.Label>Zipcode</Form.Label>
-    <Form.Control type="password" placeholder="ex. 11111" />
-  </Form.Group>
-</Form>
+  <Button type="submit" >Join!</Button>
+</Form> */}
             </div>
         )
     }
 }
 
-export default Signup
+const mapStateToProps = (state) => {
+  return {
+    users: state.users,
+    notes: state.notes
+  }
+}
 
-// t.string "username"
-// t.string "password_digest"
-// t.string "email"
-// t.string "name"
-// t.string "birthday"
-// t.integer "age"
-// t.string "gender"
-// t.string "sexual_orientation"
-// t.integer "zipcode"
+const mapDispatchToProps = {
+  newUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup)

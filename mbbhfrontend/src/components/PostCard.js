@@ -4,14 +4,15 @@ import { connect } from 'react-redux'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-const HomeCard = props => {
-  const showLink = `/show/${props.postObj.id}`
+const PostCard = props => {
+  const showLink = `/dashboard/show/${props.postObj.id}`
+  const editLink = `/dashboard/edit/${props.postObj.id}`
   
     return(
     <Card style={{ width: '18rem' }}>
     <Card.Img variant="top" src="holder.js/100px180" />
     <Card.Body>
-    <Card.Title>{props.postObj.created_at}</Card.Title>
+    <Card.Title>{String(props.postObj.date)}</Card.Title>
     <Card.Text>
     
         number = {props.postObj.number}<br></br>
@@ -23,7 +24,8 @@ const HomeCard = props => {
         notes = {props.postObj.notes}<br></br>
         happy memory = {props.postObj.happy_memory}<br></br>
     </Card.Text>
-    <Link to={showLink}><Button variant="primary">Edit</Button></Link>
+    <Link to={editLink}><Button variant="primary">Edit</Button></Link>
+    <Link to={showLink}><Button variant="primary">View</Button></Link>
     </Card.Body>
 </Card>
 
@@ -33,5 +35,5 @@ const HomeCard = props => {
 
 
 
-export default connect(null, null)(HomeCard)
+export default connect(null, null)(PostCard)
 

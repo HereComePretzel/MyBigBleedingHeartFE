@@ -20,10 +20,15 @@ export const newPost = (post) => {
     }
 }
 
-export const editPost = (post) => {
+export const editPostItem = (post) => {
     return {
-        type: 'EDIT_POST',
+        type: 'EDIT_POST_ITEM',
         post
     }
 }
 
+export const logoutPostsSuccess = () => {
+    return {
+        type: 'LOGOUT_POSTS_SUCCESS'
+    }
+}

@@ -6,6 +6,8 @@ const posts = (state=initialState, action) => {
     switch(action.type) {
         case 'FETCH_POSTS_SUCCESS':
             return [...action.posts]
+        case 'LOGOUT_POSTS_SUCCESS':
+            return []
         case 'SHOW_POST':
             const id = parseInt(action.id)
             const post = state.filter(post => {
@@ -13,11 +15,18 @@ const posts = (state=initialState, action) => {
             return post
         case 'NEW_POST':
             return [...state, action.post]
-        case 'EDIT_POST':
+        case 'EDIT_POST_ITEM':
             const newPost = {
                 ...state[0],
-                title: action.post.title,
-                body: action.post.body
+                date: action.post.date,
+                number: action.post.number,
+                meds_taken: action.post.meds_taken,
+                suicidal_thoughts: action.post.suicidal_thoughts,
+                good_thoughts: action.post.good_thoughts,
+                bad_thoughts: action.post.bad_thoughts,
+                goals: action.post.goals,
+                notes: action.post.notes,
+                happy_memory: action.post.happy_memory
             }
             return [newPost]
         case 'DELETE_POST':
