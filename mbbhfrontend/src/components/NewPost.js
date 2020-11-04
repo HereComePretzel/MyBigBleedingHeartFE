@@ -56,7 +56,6 @@ class NewPost extends Component {
     
     addPost = (e) => {
     e.preventDefault()
-      console.log(this.state)
     const reqObj = {
     method: 'POST',
     headers: {

@@ -1,35 +1,30 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts'
 import { connect } from 'react-redux'
-
 function Graph (props){
-    const [data, setData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    console.log(props)
+
+    const formatData = () => {
+        const chartData = [];
     
-    useEffect(() => {
+        props.posts.forEach(postObj => {
+            const fartData = {};
+            var dateAtt = postObj['date']
+            var dateString = dateAtt.toString()
+            fartData.name = dateString
+            fartData.data = postObj['number'];
+            chartData.push(fartData);
+        })
+        return chartData
 
-            const chartData = [];
-
-            props.posts.forEach(postObj => {
-                const fartData = {};
-                var dateAtt = postObj['date']
-                var dateString = dateAtt.toString()
-                fartData.name = dateString
-                fartData.data = postObj['number'];
-                chartData.push(fartData);
-            })
-
-        setData(chartData);
-        setIsLoading(false)
-        return null;
-    })
-
+    }
+   
     return (
-        <div className="chart-wrapper">
+        <div className="chart-wrapper" style={{padding:'70px'}}>
             <LineChart
                 width={500}
-                height={300}
-                data={data}
+                height={330}
+                data={formatData()}
                 margin={{
                     top: 5, right: 30, left: 20, bottom: 5
                 }}
@@ -48,8 +43,8 @@ function Graph (props){
 
 const mapStateToProps = (state) => {
     return {
-        posts: state.posts,
-        auth: state.auth
+        auth: state.auth,
+        posts: state.posts
     }
 }
 

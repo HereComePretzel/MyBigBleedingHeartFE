@@ -10,7 +10,7 @@ import NavHeader from './components/NavHeader'
 // import EmailForm from './components/EmailForm'
 // import Edit from './components/EditPost'
 // import ShowPost from './components/ShowPost'
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route} from 'react-router-dom';
 
 function App() {
   return (

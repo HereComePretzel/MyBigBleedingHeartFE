@@ -1,22 +1,20 @@
 
 import React, { useState, useEffect } from 'react'
-import { PieChart, Pie, Cell, Tooltip, Legend, CustomToolTip } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { connect } from 'react-redux'
 
 function PieRechartComponent (props) {
-        const [data, setData] = useState(null);
-        const [isLoading, setIsLoading] = useState(true);
-        const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
-        const pieData = []
+        const colors = ['#0F3ABD', '#2635A9', '#3D3096', '#552B82', '#6C266F', '#83215B', '#9A1C48', '#C91221', '#C91221', '#E00D0D'];
+        const pieData = [];
+
         
-        useEffect(() => {
+        const formatData = () => {
     
-                // const pieData = [];
                 const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
                 for(let i = 0; i < values.length; i++){
                     var num = 0;
                     const fartData = {};
-                    // pieData[num] = pieData[num] ? pieData[num] + 1 : 1;
+
 
                     fartData.name = values[i];
                     props.posts.forEach(postObj => {
@@ -27,16 +25,13 @@ function PieRechartComponent (props) {
                     })
                     fartData.value = num
                     pieData.push(fartData);
-                     console.log(pieData)
                 }
-    
-            setData(pieData);
-            setIsLoading(false)
-            return null;
-        })
+                console.log(pieData)
+                return pieData
+            }
+            
 
-
-    const customToolTip = ({ active, payload, label }) => {
+    const customTooltip = ({ active, payload, label }) => {
         if (active) {
             return (
                 <div className="custom-tooltip" style={{ backgroundColor: '#ffff', padding: '5px', border: '1px solid #cccc' }}>
@@ -49,13 +44,13 @@ function PieRechartComponent (props) {
     };
 
         return (
-            <PieChart width={730} height={300}>
-                <Pie data={data} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
+            <PieChart width={500} height={400}>
+                <Pie data={formatData()} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
                     {
-                        this.data.map((entry, index) => <Cell key={`cell-${index}`} fill={this.COLORS[index % this.COLORS.length]} />)
+                        pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />)
                     }
                 </Pie>
-                <Tooltip content={<this.CustomTooltip />} />
+                <Tooltip content={<customTooltip />} />
                 <Legend />
             </PieChart>
         )
@@ -64,8 +59,8 @@ function PieRechartComponent (props) {
 
 const mapStateToProps = (state) => {
     return {
-        posts: state.posts,
-        auth: state.auth
+        auth: state.auth,
+        posts: state.posts
     }
 }
 

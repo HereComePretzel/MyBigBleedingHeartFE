@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+.nav {
+  color: white;
+  background: #3C4F76;
+  padding-left: 150px;
+  color: blue
+}
+
+/* .page {
+  padding: 20px;
+}
+.form-control.react-datepicker-ignore-onclickoutside,
+.react-datepicker-wrapper {
+  width: 465px !important;
+}
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header,
+.react-datepicker__day-name,
+.react-datepicker__day,
+[class^="react-datepicker__day--*"],
+.react-datepicker__time-list-item {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+} */
