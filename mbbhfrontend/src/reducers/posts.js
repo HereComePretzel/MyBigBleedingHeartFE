@@ -6,7 +6,7 @@ const posts = (state=initialState, action) => {
     switch(action.type) {
         case 'FETCH_POSTS_SUCCESS':
             return [...action.posts]
-        case 'LOGOUT_POSTS_SUCCESS':
+        case 'LOGOUT_SUCCESS':
             return []
         case 'SHOW_POST':
             const id = parseInt(action.id)
@@ -16,7 +16,7 @@ const posts = (state=initialState, action) => {
         case 'NEW_POST':
             return [...state, action.post]
         case 'EDIT_POST_ITEM':
-            const newPost = {
+            const editedPost = {
                 ...state[0],
                 date: action.post.date,
                 number: action.post.number,
@@ -28,7 +28,7 @@ const posts = (state=initialState, action) => {
                 notes: action.post.notes,
                 happy_memory: action.post.happy_memory
             }
-            return [newPost]
+            return [editedPost]
         case 'DELETE_POST':
             const delId = parseInt(action.id)
             const delPost = state.filter(post => {

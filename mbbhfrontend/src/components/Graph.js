@@ -1,8 +1,9 @@
 import React from 'react'
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts'
+import Container from 'react-bootstrap/Container'
+import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts'
 import { connect } from 'react-redux'
 function Graph (props){
-    console.log(props)
+    // console.log(props)
 
     const formatData = () => {
         const chartData = [];
@@ -11,31 +12,46 @@ function Graph (props){
             const fartData = {};
             var dateAtt = postObj['date']
             var dateString = dateAtt.toString()
-            fartData.name = dateString
+            fartData.name = dateString.slice(0, 5)
             fartData.data = postObj['number'];
             chartData.push(fartData);
         })
         return chartData
 
     }
+
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active) {
+            return (
+                <div className="custom-tooltip" style={{ backgroundColor: '#3C4F76', fontSize:'50px', padding: '55px', border: '10px solid #000000' }}>
+                    <label style={{color: "white"}}> {payload[0].data}<br></br> Rating= {payload[0].value} </label>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
    
     return (
-        <div className="chart-wrapper" style={{padding:'70px'}}>
-            <LineChart
-                width={500}
-                height={330}
+        
+        <div className="chart-wrapper" style={{color:'white'}, {padding:'70px'}}>
+         
+            <AreaChart
+                width={2000}
+                height={530}
                 data={formatData()}
                 margin={{
-                    top: 5, right: 30, left: 20, bottom: 5
+                    top: 1, right: 30, left: 0, bottom: -50
                 }}
                 >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey='name' />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid  strokeDasharray="1001 3" />
+                <XAxis dataKey='name' stroke="FFFFFF"/>
+                <YAxis  stroke="FFFFFF"/>
+                <Tooltip content={<CustomTooltip />} />
                 <Legend />
-                <Line type="monotone" dataKey="data" stroke="#8884d8" activeDot={{r: 8 }} />
-                </LineChart>
+                <Area type="monotone" dataKey='data' opacity='100%' fill='#FFC107' stroke="black" activeDot={{r: 8 }} />
+                </AreaChart>
              
         </div>
     )

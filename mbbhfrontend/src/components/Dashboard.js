@@ -1,9 +1,6 @@
 import '../App.css';
 import React from 'react';
-import NavHeader from './NavHeader'
-import App from '../App.js'
 import NewPost from './NewPost'
-import EmailForm from './EmailForm'
 import EditPost from './EditPost'
 import ShowPost from './ShowPost'
 import {Switch, Route} from 'react-router-dom'
@@ -12,6 +9,7 @@ import { currentUser } from '../actions/auth'
 import { connect } from 'react-redux'
 import Profile from './Profile'
 import DashboardContainer from './DashboardContainer'
+import HappyMemory from './HappyMemory'
 
 
 class Dashboard extends React.Component {
@@ -46,9 +44,9 @@ render() {
         <Route exact path='/dashboard' component={DashboardContainer}/>
         <Route path='/dashboard/edit/:id' component={EditPost} />
         <Route path='/dashboard/new' component={NewPost} />
-        <Route path='/dashboard/email' component={EmailForm} />
         <Route path='/dashboard/show/:id' component={ShowPost}/>
         <Route path='/dashboard/profile' component={Profile}/>
+        <Route path='/dashboard/happymemory' component={HappyMemory}/>
         <Route path='*' component={NoMatch} />
       </Switch>
     </div>
@@ -56,9 +54,16 @@ render() {
 }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        users: state.users,
+        posts: state.posts,
+        auth: state.auth
+    }
+}
 const mapDispatchToProps = {
     currentUser
 }
 
 
-export default connect(null, mapDispatchToProps)(Dashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

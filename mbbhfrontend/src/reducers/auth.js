@@ -6,6 +6,7 @@
 const auth = (state={}, action) => {
     switch(action.type) {
         case 'LOGIN_SUCCESS':
+            return action.user
         case 'CURRENT_USER':
             return action.user
         case 'LOGOUT_SUCCESS':

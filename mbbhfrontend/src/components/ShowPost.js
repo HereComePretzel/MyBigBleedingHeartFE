@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { showPost } from '../actions/posts'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import NavHeader from './NavHeader'
 
 
 class ShowPost extends React.Component {
@@ -16,25 +17,34 @@ class ShowPost extends React.Component {
     
   
   render(){
-    const editLink = `/dashboard/edit/${this.props.posts.id}`
+    const editLink = `/dashboard/edit/${this.props.posts[0].id}`
       return(
-          <div>
-              <Card style={{ width: '18rem' }}>
-    <Card.Img variant="top" src="holder.js/100px180" />
+        <div>
+        <NavHeader />
+    <Card className='postcardstyleshow' style={{ width: '100%' }}>
+
     <Card.Body>
-    <Card.Title>{this.props.posts[0].created_at}</Card.Title>
+    <Card.Title className='postcardstyleshowtitle' style={{fontSize:'80px'}}>  {this.props.posts[0].date}</Card.Title>
     <Card.Text>
-    
-        number = {this.props.posts[0].number}<br></br>
-        good thoughts = {this.props.posts[0].good_thoughts}<br></br>
-        bad thoughts = {this.props.posts[0].bad_thoughts}<br></br>
-        suicidal thoughts = {String(this.props.posts[0].suicidal_thoughts)}<br></br>
-        meds taken = {String(this.props.posts[0].meds_taken)}<br></br>
-        goals = {this.props.posts[0].goals}<br></br>
-        notes = {this.props.posts[0].notes}<br></br>
-        happy memory = {this.props.posts[0].happy_memory}<br></br>
+      <br></br>
+        <h2>Rating:</h2>
+        <h3>{this.props.posts[0].number}</h3><br></br>
+        <h2>Good thoughts:</h2>
+        <h3>{this.props.posts[0].good_thoughts}</h3><br></br>
+        <h2>Bad thoughts:</h2>
+        <h3>{this.props.posts[0].bad_thoughts}</h3><br></br>
+        <h2>Suicidal thoughts:</h2>
+        <h3>{String(this.props.posts[0].suicidal_thoughts)}</h3><br></br>
+        <h2>Meds taken:</h2>
+        <h3>{String(this.props.posts[0].meds_taken)}</h3><br></br>
+        <h2>Goals:</h2>
+        <h3>{this.props.posts[0].goals}</h3><br></br>
+        <h2>Notes:</h2>
+        <h3>{this.props.posts[0].notes}</h3><br></br>
+        <h2>Happy Memory:</h2>
+        <h3>{this.props.posts[0].happy_memory}</h3><br></br>
     </Card.Text>
-    <Link to={editLink}><Button variant="primary">Edit</Button></Link>
+    <Link to={editLink}><Button className='updateprofilebutton' variant="primary">Edit</Button></Link>
     </Card.Body>
         </Card>
   </div>

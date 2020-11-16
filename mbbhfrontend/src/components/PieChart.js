@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { connect } from 'react-redux'
 
@@ -26,16 +26,16 @@ function PieRechartComponent (props) {
                     fartData.value = num
                     pieData.push(fartData);
                 }
-                console.log(pieData)
+                // console.log(pieData)
                 return pieData
             }
             
 
-    const customTooltip = ({ active, payload, label }) => {
+    const CustomTooltip = ({ active, payload, label }) => {
         if (active) {
             return (
-                <div className="custom-tooltip" style={{ backgroundColor: '#ffff', padding: '5px', border: '1px solid #cccc' }}>
-                    <label>{`${payload[0].name} : ${payload[0].value}%`}</label>
+                <div className="custom-tooltip" style={{ backgroundColor: '#3C4F76', fontSize:'50px', padding: '55px', border: '10px solid #000000' }}>
+                    <label style={{color: "white"}}>Rating={payload[0].name}<br></br> Occurrences= {payload[0].value} </label>
                 </div>
             );
         }
@@ -44,15 +44,17 @@ function PieRechartComponent (props) {
     };
 
         return (
-            <PieChart width={500} height={400}>
-                <Pie data={formatData()} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
+            <div className="piechart" >
+            <PieChart width={1200} height={1000}>
+                <Pie data={formatData()} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={400} fill="#000000" >
                     {
                         pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />)
                     }
                 </Pie>
-                <Tooltip content={<customTooltip />} />
-                <Legend />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend className='cuntballs'/>
             </PieChart>
+            </div>
         )
     ;
 }

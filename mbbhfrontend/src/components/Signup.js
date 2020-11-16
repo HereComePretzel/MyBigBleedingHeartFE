@@ -1,10 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { newUser } from '../actions/users'
 import { currentUser } from '../actions/auth'
+import { loginSuccess } from '../actions/auth'
+import NavHeader from './NavHeader'
+
 
 class Signup extends React.Component{
   state = {
@@ -12,55 +15,43 @@ class Signup extends React.Component{
     password: '',
     email: ''
   }
-  // componentDidMount(){
-  //   const token = localStorage.getItem('myAppToken')
-  //   if(!token) {
-  //       this.props.history.push('/login')
-  //   } else {
-  //       const reqObj = {
-  //           method: 'GET',
-  //           headers: {
-  //               'Authorization': `Bearer ${token}`
-  //           }
-  //       }
-  //       fetch('http://localhost:3000/api/v1/current_user', reqObj)
-  //       .then(resp => resp.json())
-  //       .then(data => { 
-  //           if (data.error){
-  //               this.props.history.push('/login')
-  //           } else {
-  //               this.props.currentUser(data)
-  //               this.setState({
-  //                 user_id: data.id
-  //               })
-              
-
-  //           }
-  //       })
-  //   }}
-  
-
-  
 
   addUser = (e) => {
     e.preventDefault()
-
     const reqObj = {
-      method: 'POST',
-      headers: {
-        'Content-Type' : 'application/json'
-      },
-      body: JSON.stringify(this.state)
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({user: this.state})
     }
-    console.log(this.state)
     fetch('http://localhost:3000/users', reqObj)
     .then(resp => resp.json())
     .then(user => {
-
-      this.props.history.push('/dashboard')
-      this.props.newUser(user)
+            const reqObj = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state)
+            }
+            fetch('http://localhost:3000/api/v1/auth', reqObj)
+            .then(resp => resp.json())
+            .then(user => {
+                if(user.error){
+                    this.setState({
+                        error: user.error
+                    })
+                } else {
+                    localStorage.setItem('myAppToken', user.token)
+                    this.props.loginSuccess(user)
+                    this.props.history.push('/dashboard')
+                }
+            })
     })
-  }
+}
+
+
 
   handleChange = (e) => {
     this.setState({
@@ -70,18 +61,10 @@ class Signup extends React.Component{
 
     render(){
         return (
-            <div>
-                <form className='newcontainer' onSubmit={this.addUser}>
-        <h1 className='titletext'>Username</h1>
-          <input name='username' className='titlebox' onChange={this.handleChange} value={this.state.username}/>
-          <h2 className='titletext'>Password</h2>
-          <textarea name='password' className='titlebox' onChange={this.handleChange} value={this.state.password}/>
-          <h2 className='titletext'>Email</h2>
-          <textarea name='email' className='titlebox' onChange={this.handleChange} value={this.state.email}/>
-          <br></br>
-          <input className='addbutton' type='submit' value='Sign Up' />
-        </form>
-                {/* <Form onSubmit={this.addUser} style={{width:'50%'}} className="mx-auto">
+        <div>
+        <NavHeader />
+            <div className="signup">
+                <Form onSubmit={this.addUser} style={{width:'50%'}} className="mx-auto">
   <Form.Group controlId="username">
     <Form.Label>Username</Form.Label>
     <Form.Control type="input" name='username' onChange={this.handleChange} value={this.state.username}/>
@@ -95,7 +78,9 @@ class Signup extends React.Component{
     <Form.Control type="email" name='email' onChange={this.handleChange} value={this.state.email}/>
   </Form.Group>
   <Button type="submit" >Join!</Button>
-</Form> */}
+</Form>
+<h1 className='logintagline'>Because you are worthy.</h1>
+            </div>
             </div>
         )
     }
@@ -111,7 +96,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   newUser,
-  currentUser
+  currentUser,
+  loginSuccess,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup)

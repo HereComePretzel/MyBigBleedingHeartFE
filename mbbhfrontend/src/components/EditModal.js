@@ -1,15 +1,15 @@
 import React from 'react'
+import {Button, Modal} from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { editPostItem } from '../actions/posts'
 import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import { editPost } from '../actions/posts'
 import { currentUser } from '../actions/auth'
-import NavHeader from './NavHeader'
 
 
-class EditPost extends React.Component{
+class EditModal extends React.Component {
     state = {
+        show: false,
         date: '',
         number: '',
         meds_taken: false,
@@ -20,8 +20,23 @@ class EditPost extends React.Component{
         notes: '',
         happy_memory: ''
     }
-
-
+    
+    componentDidMount(){
+        const { date, number, meds_taken, suicidal_thoughts, good_thoughts, bad_thoughts, goals, notes, happy_memory } = this.props.posts[0]
+        this.setState({
+          date,
+          number,
+          meds_taken,
+          suicidal_thoughts,
+          good_thoughts,
+          bad_thoughts,
+          goals,
+          notes,
+          happy_memory
+        })
+      }
+    
+   
     editPost = (e) => {
         e.preventDefault()
     
@@ -40,38 +55,31 @@ class EditPost extends React.Component{
             this.props.history.push('/dashboard')
           })
         }
-    
-        componentDidMount(){
-          const { date, number, meds_taken, suicidal_thoughts, good_thoughts, bad_thoughts, goals, notes, happy_memory } = this.props.posts[0]
-          this.setState({
-            date,
-            number,
-            meds_taken,
-            suicidal_thoughts,
-            good_thoughts,
-            bad_thoughts,
-            goals,
-            notes,
-            happy_memory
-          })
-        }
-    
-      handleChange = (e) => {
-        this.setState({ 
-          [e.target.name]: e.target.value
-        })
-      }
-    
-    
-      render(){
-        return (
-            <div>
-              <NavHeader />
-              <Form className='postcardstyleedit' onSubmit={this.editPost}>
-              <Form.Group controlId="exampleForm.ControlTextarea7">
-            <Form.Label className='postcardstyleshowtitle'>{this.state.date}</Form.Label>
+
+    handleClick = (e) =>{
+      this.setState({
+        show: !this.state.show
+      })
+    }
+
+    handleChange = (e) => {
+      this.setState({ 
+        [e.target.name]: e.target.value
+      })
+    }
+
+
+  render() {
+    return (
+      <div >
+        
+        <Modal show={this.state.show} >
+        <Form  onSubmit={this.editPost}  className="mx-auto">
+        <Form.Group controlId="exampleForm.ControlTextarea7">
+            <Form.Label>Date</Form.Label>
+            <Form.Control onChange={this.handleChange} placeholder='DD/MM/YYYY' name='date' value={this.state.date} as="textarea" rows={1} />
           </Form.Group>
-  <Form.Group controlId="exampleForm.ControlSelect1">
+      <Form.Group controlId="exampleForm.ControlSelect1">
     <Form.Label>How Was Your Day?</Form.Label>
     <Form.Control onChange={this.handleChange} name='number' value={this.state.number} as="select">
       <option>1</option>
@@ -92,8 +100,8 @@ class EditPost extends React.Component{
     </Form.Control>
     <Form.Label>Did You Have Thoughts of Suicide?</Form.Label>
     <Form.Control onChange={this.handleChange} name='suicidal_thoughts' value={this.state.suicidal_thoughts} as="select">
-      <option>True</option>
       <option>False</option>
+      <option>True</option>
     </Form.Control>
   </Form.Group>
   <Form.Group controlId="exampleForm.ControlTextarea1">
@@ -116,24 +124,29 @@ class EditPost extends React.Component{
     <Form.Label>Happy Memory:</Form.Label>
     <Form.Control onChange={this.handleChange} name='happy_memory' value={this.state.happy_memory} as="textarea" rows={3}/>
   </Form.Group>
-  <Button variant="primary" className='updateprofilebutton' type='submit'>Update</Button>{' '}
-  <Link to='/dashboard'> <Button variant="primary" className='updateprofilebutton' >Exit</Button></Link>
+  <Button type='submit' onClick={this.handleClick} className='btn btn-warning' variant="primary">Submit</Button>{' '}
+  <Link to='/dashboard'><Button onClick={this.handleClick} variant="primary" className='btn btn-warning'>Exit</Button></Link>
 </Form>
-            </div>
-        )
-    }
-}
+   
+        </Modal>
+        <Button className='editpostbutton' onClick={this.handleClick}>Add Post</Button>
+      </div>
+    )}
+  }
 
-const mapStateToProps = (state) => {
+  const mapStateToProps = (state) => {
     return {
-    posts: state.posts
+    posts: state.posts,
+    auth: state.auth
     }
   }
   
   
   const mapDispatchToProps = {
-    editPostItem,
+    editPost,
     currentUser
   }
   
-  export default connect(mapStateToProps, mapDispatchToProps)(EditPost)
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(EditModal)
+  

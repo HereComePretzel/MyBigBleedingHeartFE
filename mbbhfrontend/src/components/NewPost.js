@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import { newPost } from '../actions/posts'
 import { currentUser } from '../actions/auth'
-import NavHeader from './NavHeader'
+// import NavHeader from './NavHeader'
 import { Link } from 'react-router-dom'
 
 
